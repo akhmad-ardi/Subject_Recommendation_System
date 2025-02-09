@@ -184,35 +184,31 @@ Variabel-variabel pada [Dataset Student Studeis Recommendation](https://www.kagg
 ## Modeling
 Dengan menggunakan pendekatan berbasis kesamaan (similarity-based) dengan metode cosine similarity. Berikut adalah langkah-langkah utama dalam sistem ini:
 
-1. **Preprocessing Input**
-    - **Normalisasi Skor Mata Pelajaran** <br>
-    Skor mata pelajaran dari siswa dinormalisasi menggunakan `scaler.transform()` agar berada dalam skala yang sama.
-    - **TF-IDF untuk Career Aspiration** <br>
-    Preferensi karier siswa dikonversi ke dalam vektor numerik menggunakan metode TF-IDF.
-    - **Penyesuaian Weekly Study dan Absence** <br>
-        - `study_adjustment` dihitung dengan membagi jumlah jam belajar per minggu dengan 50.
-        - `absence_penalty` dihitung sebagai `1 - (jumlah hari absen / 10)`, yang mengurangi skor jika siswa sering absen.
-
-2. **Penggabungan Semua Fitur Input**
-    - Semua fitur (skor mata pelajaran, aspirasi karier, jam belajar, dan jumlah absensi) dikombinasikan menjadi satu vektor menggunakan `np.concatenate()`, lalu diubah menjadi bentuk `(1, -1)` agar kompatibel dengan perhitungan similarity.
-
-3. **Menghitung Similarity dengan Seluruh Siswa**
+1. **Menghitung Similarity dengan Seluruh Siswa**
     - Menggunakan cosine similarity, input siswa dibandingkan dengan data siswa lain (`train_data`) untuk mencari siswa yang paling mirip.
 
-4. **Memilih Siswa Teratas Berdasarkan Similarity**
+2. **Memilih Siswa Teratas Berdasarkan Similarity**
     - Hasil cosine similarity diurutkan dari yang paling mirip hingga paling tidak mirip.
     - Diambil **n siswa teratas** (default: 3 siswa) sebagai referensi.
 
-5. **Menghitung Rata-rata Skor Mata Pelajaran dari Siswa Teratas**
+3. **Menghitung Rata-rata Skor Mata Pelajaran dari Siswa Teratas**
     - Skor mata pelajaran dari siswa yang dipilih dihitung rata-ratanya.
     - Hasilnya diurutkan secara menurun (`sort_values(ascending=False)`) agar mendapatkan rekomendasi terbaik.
 
-6. **Menghasilkan Rekomendasi Mata Pelajaran**
+4. **Menghasilkan Rekomendasi Mata Pelajaran**
     - Mengambil 3 mata pelajaran teratas (`head(3)`) dari hasil perhitungan rata-rata dan mengembalikannya dalam bentuk dictionary.
 
 Sistem ini memberikan rekomendasi mata pelajaran yang paling sesuai berdasarkan **kemiripan nilai akademik**, **aspirasi karier**, **waktu belajar dalam sepekan**, dan **ketidakhadiran di kelas**
 
 Dengan pendekatan ini, sistem dapat membantu siswa memilih mata pelajaran yang sesuai dengan kekuatan akademik dan tujuan karier mereka.
+
+### Test Subject Recommendation System
+
+|  Input |  Subjects |
+|---|---|
+| ![Image 1](images/Test_model_1.png) | ['math', 'physics', 'chemistry']  |
+| ![Image 2](images/Test_model_2.png)  | ['math', 'physics', 'english']  |
+| ![Image 3](images/Test_model_3.png)  |  ['physics', 'geography', 'history'] |
 
 ## Evaluation
 Untuk mengevaluasi performa masing-masing model menggunakan metrik Precision, Recall dan F1-Score. Berikut peran masing-masing metrik:
